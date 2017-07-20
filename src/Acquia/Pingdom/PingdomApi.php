@@ -146,8 +146,7 @@ class PingdomApi {
    * @param array $defaults
    *   An array of default settings for the check.
    *
-   * @return string
-   *   A success message.
+   * @return data
    */
   public function addCheck($check, $defaults = array()) {
     $this->ensureParameters(array(
@@ -156,8 +155,7 @@ class PingdomApi {
       'url' => $check['url'],
     ), __METHOD__);
     $check += $defaults;
-    $data = $this->request('POST', 'checks', $check);
-    return sprintf('Created check %s for %s at http://%s%s', $data->check->id, $check['name'], $check['host'], $check['url']);
+    return $this->request('POST', 'checks', $check);
   }
 
   /**
@@ -166,8 +164,7 @@ class PingdomApi {
    * @param int $check_id
    *   The ID of the check to pause.
    *
-   * @return string
-   *   The returned response message.
+   * @return data
    */
   public function pauseCheck($check_id) {
     $this->ensureParameters(array('check_id' => $check_id), __METHOD__);
@@ -183,8 +180,7 @@ class PingdomApi {
    * @param array $check_id
    *   The ID of the check to pause.
    *
-   * @return string
-   *   The returned response message.
+   * @return data
    */
   public function unpauseCheck($check_id) {
     $this->ensureParameters(array('check_id' => $check_id), __METHOD__);
@@ -200,9 +196,7 @@ class PingdomApi {
    * @param array $check_ids
    *   An array of check IDs to pause.
    *
-   * @return string
-   *   The returned response message.
-   */
+   * @return data
   public function pauseChecks($check_ids) {
     $this->ensureParameters(array('check_ids' => $check_ids), __METHOD__);
     $parameters = array(
@@ -217,8 +211,7 @@ class PingdomApi {
    * @param array $check_ids
    *   An array of check IDs to unpause.
    *
-   * @return string
-   *   The returned response message.
+   * @return data
    */
   public function unpauseChecks($check_ids) {
     $this->ensureParameters(array('check_ids' => $check_ids), __METHOD__);
@@ -236,8 +229,7 @@ class PingdomApi {
    * @param array $parameters
    *   An array of settings by which to modify the check.
    *
-   * @return string
-   *   The returned response message.
+   * @return data
    */
   public function modifyCheck($check_id, $parameters) {
     $this->ensureParameters(array(
@@ -245,7 +237,7 @@ class PingdomApi {
       'parameters' => $parameters,
     ), __METHOD__);
     $data = $this->request('PUT', "checks/${check_id}", $parameters);
-    return $data->message;
+    return $data;
   }
 
   /**
@@ -263,8 +255,7 @@ class PingdomApi {
    *   - paused: TRUE for paused; FALSE for unpaused.
    *   - resolution: An integer specifying the check frequency.
    *
-   * @return string
-   *   The returned response message.
+   * @return data
    */
   public function modifyChecks($check_ids, $parameters) {
     $this->ensureParameters(array(
@@ -272,8 +263,7 @@ class PingdomApi {
       'parameters' => $parameters,
     ), __METHOD__);
     $parameters['checkids'] = implode(',', $check_ids);
-    $data = $this->request('PUT', 'checks', $parameters);
-    return $data->message;
+    return $this->request('PUT', 'checks', $parameters);
   }
 
   /**
@@ -294,8 +284,7 @@ class PingdomApi {
    */
   public function modifyAllChecks($parameters) {
     $this->ensureParameters(array('parameters' => $parameters), __METHOD__);
-    $data = $this->request('PUT', 'checks', $parameters);
-    return $data->message;
+    return $this->request('PUT', 'checks', $parameters);
   }
 
   /**
@@ -309,8 +298,7 @@ class PingdomApi {
    */
   public function removeCheck($check_id) {
     $this->ensureParameters(array('check_id' => $check_id), __METHOD__);
-    $data = $this->request('DELETE', "checks/${check_id}");
-    return $data->message;
+    return $this->request('DELETE', "checks/${check_id}");
   }
 
   /**
@@ -328,8 +316,7 @@ class PingdomApi {
     $parameters = array(
       'delcheckids' => $check_ids,
     );
-    $data = $this->request('DELETE', 'checks', $parameters);
-    return $data->message;
+   return $this->request('DELETE', 'checks', $parameters);
   }
 
   /**
@@ -394,8 +381,7 @@ class PingdomApi {
 			'contact_id' => $contact_id,
 			'parameters' => $parameters,
 		), __METHOD__);
-		$data = $this->request('PUT', "notification_contacts/${contact_id}", $parameters);
-		return $data->message;
+		return $this->request('PUT', "notification_contacts/${contact_id}", $parameters);
 	}
 
 	/**
@@ -421,8 +407,7 @@ class PingdomApi {
 		$this->ensureParameters(array(
 			'contact_id' => $contact_id,
 		), __METHOD__);
-		$data = $this->request('DELETE', "notification_contacts/${contact_id}");
-		return $data->message;
+		return $this->request('DELETE', "notification_contacts/${contact_id}");
 	}
 
   /**
